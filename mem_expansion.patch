@@ -1,0 +1,77 @@
+diff --git a/rtos/pmsis/pmsis_api/include/pmsis/rtos/malloc/l2_malloc.h b/rtos/pmsis/pmsis_api/include/pmsis/rtos/malloc/l2_malloc.h
+index aa35686..2728151 100644
+--- a/rtos/pmsis/pmsis_api/include/pmsis/rtos/malloc/l2_malloc.h
++++ b/rtos/pmsis/pmsis_api/include/pmsis/rtos/malloc/l2_malloc.h
+@@ -102,6 +102,11 @@ void pi_l2_malloc_dump();
+  * @} MemAlloc
+  */
+ 
++#if defined(ARCHI_HAS_L2_PRIV2)
++void *pi_l2_priv2_malloc(int size);
++void pi_l2_priv2_free(void *_chunk, int size);
++#endif
++
+ #endif  /* __L2_MALLOC_NATIVE__ */
+ 
+ #endif  /* __PMSIS_RTOS_MALLOC_L2_MALLOC_H__ */
+diff --git a/rtos/pulpos/common/include/pos/data/data.h b/rtos/pulpos/common/include/pos/data/data.h
+index 58a7581..9ecd471 100644
+--- a/rtos/pulpos/common/include/pos/data/data.h
++++ b/rtos/pulpos/common/include/pos/data/data.h
+@@ -62,6 +62,7 @@
+ #define PI_CL_L1 __attribute__((section(".data_l1")))
+ #define PI_L1 PI_CL_L1
+ 
++#define PI_L2_PRIV2_DATA __attribute__((section(".data_priv2")))
+ 
+ struct pi_task_implem
+ {
+@@ -128,7 +129,11 @@ typedef struct pi_cluster_pe_task_s
+ 
+ #if defined(ARCHI_HAS_L2)
+ #ifdef ARCHI_HAS_L2_MULTI
++#if defined(ARCHI_HAS_L2_PRIV2)
++#define POS_NB_ALLOC_L2 3
++#else
+ #define POS_NB_ALLOC_L2 2
++#endif
+ #else
+ #define POS_NB_ALLOC_L2 1
+ #endif
+diff --git a/rtos/pulpos/common/kernel/alloc_pool.c b/rtos/pulpos/common/kernel/alloc_pool.c
+index 209bcc2..4f74551 100644
+--- a/rtos/pulpos/common/kernel/alloc_pool.c
++++ b/rtos/pulpos/common/kernel/alloc_pool.c
+@@ -87,6 +87,11 @@ void pos_allocs_init()
+ #endif
+ #endif
+ 
++#if defined(ARCHI_HAS_L2_PRIV2)
++    INIT_TRACE(POS_LOG_INFO, "Initializing L2 priv2 bank allocator (base: 0x%8x, size: 0x%8x)\n", (int)pos_l2_priv2_base(), pos_l2_priv2_size());
++    pos_alloc_init(&pos_alloc_l2[2], pos_l2_priv2_base(), pos_l2_priv2_size());
++#endif
++
+ #if defined(ARCHI_HAS_FC_TCDM)
+   //pos_trace(//pos_trace_INIT, "Initializing FC TCDM allocator (base: 0x%8x, size: 0x%8x)\n", (int)pos_fc_tcdm_base(), pos_fc_tcdm_size());
+     pos_alloc_init(&pos_alloc_fc_tcdm, pos_fc_tcdm_base(), pos_fc_tcdm_size());
+@@ -189,6 +194,20 @@ void pi_l2_free(void *_chunk, int size)
+     return pos_free(&pos_alloc_l2[1], _chunk, size);
+ }
+ 
++#if defined(ARCHI_HAS_L2_PRIV2)
++
++void *pi_l2_priv2_malloc(int size)
++{
++    return pos_alloc(&pos_alloc_l2[2], size);
++}
++
++void pi_l2_priv2_free(void *_chunk, int size)
++{
++    return pos_free(&pos_alloc_l2[2], _chunk, size);
++}
++
++#endif
++
+ #if defined(ARCHI_HAS_FC_TCDM)
+ 
+ void *pi_fc_l1_malloc(int size)

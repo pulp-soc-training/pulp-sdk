@@ -1,0 +1,401 @@
+diff --git a/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/memory_map.h b/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/memory_map.h
+index 4e226bb..a6a2f6d 100644
+--- a/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/memory_map.h
++++ b/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/memory_map.h
+@@ -19,7 +19,6 @@
+ #define __ARCHI_PULPISSIMO_MEMORY_MAP_H__
+ 
+ 
+-
+ /*
+  * SOC PERIPHERALS
+  */
+@@ -38,6 +37,9 @@
+ #define ARCHI_FC_HWPE_OFFSET          0x0000C000
+ #define ARCHI_STDOUT_OFFSET           0x0000F000
+ 
++#if defined(ARCHI_HAS_WIDE_ALU)
++#define ARCHI_WIDE_ALU_OFFSET         0x00020000
++#endif
+ 
+ 
+ #define ARCHI_GPIO_ADDR              ( ARCHI_SOC_PERIPHERALS_ADDR + ARCHI_GPIO_OFFSET )
+@@ -49,7 +51,9 @@
+ #define ARCHI_FC_HWPE_ADDR           ( ARCHI_SOC_PERIPHERALS_ADDR + ARCHI_FC_HWPE_OFFSET )
+ #define ARCHI_STDOUT_ADDR            ( ARCHI_SOC_PERIPHERALS_ADDR + ARCHI_STDOUT_OFFSET )
+ 
+-
++#if defined(ARCHI_HAS_WIDE_ALU)
++#define ARCHI_WIDE_ALU_ADDR          ( ARCHI_SOC_PERIPHERALS_ADDR + ARCHI_WIDE_ALU_OFFSET )
++#endif
+ 
+ #define ARCHI_FLL_AREA_SIZE          0x00000010
+ 
+diff --git a/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/properties.h b/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/properties.h
+index a1ae42d..fb275fa 100644
+--- a/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/properties.h
++++ b/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/properties.h
+@@ -73,6 +73,11 @@
+ #define HWME_VERSION        1
+ #define PADS_VERSION        2
+ 
++#define ARCHI_HAS_WIDE_ALU  1
++
++#if defined(ARCHI_HAS_WIDE_ALU)
++#define WIDE_ALU_VERSION    1
++#endif
+ 
+ /*
+  * CORE IDS
+diff --git a/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/pulp.h b/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/pulp.h
+index d94bf2b..6045580 100644
+--- a/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/pulp.h
++++ b/rtos/pulpos/pulp_archi/include/archi/chips/pulpissimo/pulp.h
+@@ -36,4 +36,6 @@
+ #include "archi/udma/uart/udma_uart_v1.h"
+ #include "archi/udma/udma_v3.h"
+ 
+-#endif
+\ No newline at end of file
++#include "archi/wide_alu/wide_alu_v1.h"
++
++#endif
+diff --git a/rtos/pulpos/pulp_archi/include/archi/wide_alu/wide_alu_v1.h b/rtos/pulpos/pulp_archi/include/archi/wide_alu/wide_alu_v1.h
+new file mode 100644
+index 0000000..77431ea
+--- /dev/null
++++ b/rtos/pulpos/pulp_archi/include/archi/wide_alu/wide_alu_v1.h
+@@ -0,0 +1,179 @@
++// Generated register defines for wide_alu
++
++#ifndef _WIDE_ALU_REG_DEFS_
++#define _WIDE_ALU_REG_DEFS_
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++// Register width
++#define WIDE_ALU_PARAM_REG_WIDTH 32
++
++// Subword of Operand A. (common parameters)
++#define WIDE_ALU_OP_A_OP_A_FIELD_WIDTH 32
++#define WIDE_ALU_OP_A_OP_A_FIELDS_PER_REG 1
++#define WIDE_ALU_OP_A_MULTIREG_COUNT 8
++
++#define WIDE_ALU_OP_A_REG_OFFSET 0x0
++#define WIDE_ALU_OP_A(id) (ARCHI_WIDE_ALU_ADDR + WIDE_ALU_OP_A_REG_OFFSET + (0x4 * (id)))
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_0_REG_OFFSET 0x0
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_1_REG_OFFSET 0x4
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_2_REG_OFFSET 0x8
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_3_REG_OFFSET 0xc
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_4_REG_OFFSET 0x10
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_5_REG_OFFSET 0x14
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_6_REG_OFFSET 0x18
++
++// Subword of Operand A.
++#define WIDE_ALU_OP_A_7_REG_OFFSET 0x1c
++
++// Subword of Operand B. (common parameters)
++#define WIDE_ALU_OP_B_OP_B_FIELD_WIDTH 32
++#define WIDE_ALU_OP_B_OP_B_FIELDS_PER_REG 1
++#define WIDE_ALU_OP_B_MULTIREG_COUNT 8
++
++#define WIDE_ALU_OP_B_REG_OFFSET 0x20
++#define WIDE_ALU_OP_B(id) (ARCHI_WIDE_ALU_ADDR + WIDE_ALU_OP_B_REG_OFFSET + (0x4 * (id)))
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_0_REG_OFFSET 0x20
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_1_REG_OFFSET 0x24
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_2_REG_OFFSET 0x28
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_3_REG_OFFSET 0x2c
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_4_REG_OFFSET 0x30
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_5_REG_OFFSET 0x34
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_6_REG_OFFSET 0x38
++
++// Subword of Operand B.
++#define WIDE_ALU_OP_B_7_REG_OFFSET 0x3c
++
++// Subword of results. (common parameters)
++#define WIDE_ALU_RESULT_RESULT_FIELD_WIDTH 32
++#define WIDE_ALU_RESULT_RESULT_FIELDS_PER_REG 1
++#define WIDE_ALU_RESULT_MULTIREG_COUNT 16
++
++#define WIDE_ALU_RESULT_REG_OFFSET 0x40
++#define WIDE_ALU_RESULT(id) (ARCHI_WIDE_ALU_ADDR + WIDE_ALU_RESULT_REG_OFFSET + (0x4 * (id)))
++
++// Subword of results.
++#define WIDE_ALU_RESULT_0_REG_OFFSET 0x40
++
++// Subword of results.
++#define WIDE_ALU_RESULT_1_REG_OFFSET 0x44
++
++// Subword of results.
++#define WIDE_ALU_RESULT_2_REG_OFFSET 0x48
++
++// Subword of results.
++#define WIDE_ALU_RESULT_3_REG_OFFSET 0x4c
++
++// Subword of results.
++#define WIDE_ALU_RESULT_4_REG_OFFSET 0x50
++
++// Subword of results.
++#define WIDE_ALU_RESULT_5_REG_OFFSET 0x54
++
++// Subword of results.
++#define WIDE_ALU_RESULT_6_REG_OFFSET 0x58
++
++// Subword of results.
++#define WIDE_ALU_RESULT_7_REG_OFFSET 0x5c
++
++// Subword of results.
++#define WIDE_ALU_RESULT_8_REG_OFFSET 0x60
++
++// Subword of results.
++#define WIDE_ALU_RESULT_9_REG_OFFSET 0x64
++
++// Subword of results.
++#define WIDE_ALU_RESULT_10_REG_OFFSET 0x68
++
++// Subword of results.
++#define WIDE_ALU_RESULT_11_REG_OFFSET 0x6c
++
++// Subword of results.
++#define WIDE_ALU_RESULT_12_REG_OFFSET 0x70
++
++// Subword of results.
++#define WIDE_ALU_RESULT_13_REG_OFFSET 0x74
++
++// Subword of results.
++#define WIDE_ALU_RESULT_14_REG_OFFSET 0x78
++
++// Subword of results.
++#define WIDE_ALU_RESULT_15_REG_OFFSET 0x7c
++
++// Controls clear and trigger signal of the deaccelerator.
++#define WIDE_ALU_CTRL1_REG_OFFSET 0x80
++#define WIDE_ALU_CTRL1(id) (ARCHI_WIDE_ALU_ADDR + WIDE_ALU_CTRL1_REG_OFFSET + (0x4 * (id)))
++
++#define WIDE_ALU_CTRL1_TRIGGER_MASK 0x1
++#define WIDE_ALU_CTRL1_CLEAR_ERR_MASK 0x1
++#define WIDE_ALU_CTRL1_TRIGGER_LSB 0
++#define WIDE_ALU_CTRL1_CLEAR_ERR_LSB 1
++
++// Configures the operation and its delay within the deaccelerator.
++#define WIDE_ALU_CTRL2_REG_OFFSET 0x84
++#define WIDE_ALU_CTRL2(id) (ARCHI_WIDE_ALU_ADDR + WIDE_ALU_CTRL2_REG_OFFSET + (0x4 * (id)))
++
++#define WIDE_ALU_CTRL2_OPSEL_MASK 0x7
++#define WIDE_ALU_CTRL2_OPSEL_LSB 0
++#define WIDE_ALU_CTRL2_OPSEL_OFFSET 0
++#define WIDE_ALU_CTRL2_OPSEL_FIELD \
++  ((bitfield_field32_t) { .mask = WIDE_ALU_CTRL2_OPSEL_MASK, .index = WIDE_ALU_CTRL2_OPSEL_OFFSET })
++#define WIDE_ALU_CTRL2_OPSEL_VALUE_ADD 0x0
++#define WIDE_ALU_CTRL2_OPSEL_VALUE_SUB 0x1
++#define WIDE_ALU_CTRL2_OPSEL_VALUE_MUL 0x2
++#define WIDE_ALU_CTRL2_OPSEL_VALUE_XOR 0x3
++#define WIDE_ALU_CTRL2_OPSEL_VALUE_AND 0x4
++#define WIDE_ALU_CTRL2_OPSEL_VALUE_OR 0x5
++#define WIDE_ALU_CTRL2_DELAY_MASK 0xff
++#define WIDE_ALU_CTRL2_DELAY_LSB 16
++#define WIDE_ALU_CTRL2_DELAY_OFFSET 16
++#define WIDE_ALU_CTRL2_DELAY_FIELD \
++  ((bitfield_field32_t) { .mask = WIDE_ALU_CTRL2_DELAY_MASK, .index = WIDE_ALU_CTRL2_DELAY_OFFSET })
++
++// Contains the current status of the Deaccelerator.
++#define WIDE_ALU_STATUS_REG_OFFSET 0x88
++#define WIDE_ALU_STATUS(id) (ARCHI_WIDE_ALU_ADDR + WIDE_ALU_STATUS_REG_OFFSET + (0x4 * (id)))
++#define WIDE_ALU_STATUS_CODE_MASK 0x3
++#define WIDE_ALU_STATUS_CODE_LSB 0
++#define WIDE_ALU_STATUS_CODE_OFFSET 0
++#define WIDE_ALU_STATUS_CODE_FIELD \
++  ((bitfield_field32_t) { .mask = WIDE_ALU_STATUS_CODE_MASK, .index = WIDE_ALU_STATUS_CODE_OFFSET })
++#define WIDE_ALU_STATUS_CODE_VALUE_IDLE 0x0
++#define WIDE_ALU_STATUS_CODE_VALUE_PENDING 0x1
++#define WIDE_ALU_STATUS_CODE_VALUE_ERROR_WRITE 0x2
++#define WIDE_ALU_STATUS_CODE_VALUE_ERROR_OPCODE 0x3
++
++#ifdef __cplusplus
++}  // extern "C"
++#endif
++#endif  // _WIDE_ALU_REG_DEFS_
++// End generated register defines for wide_alu
+diff --git a/rtos/pulpos/pulp_hal/include/hal/chips/pulpissimo/pulp.h b/rtos/pulpos/pulp_hal/include/hal/chips/pulpissimo/pulp.h
+index c2e1c52..7e2d75f 100644
+--- a/rtos/pulpos/pulp_hal/include/hal/chips/pulpissimo/pulp.h
++++ b/rtos/pulpos/pulp_hal/include/hal/chips/pulpissimo/pulp.h
+@@ -33,4 +33,6 @@
+ #include "hal/udma/spim/udma_spim_v3.h"
+ #include "hal/udma/uart/udma_uart_v1.h"
+ 
++#include "hal/wide_alu/wide_alu_v1.h"
++
+ #endif
+diff --git a/rtos/pulpos/pulp_hal/include/hal/wide_alu/wide_alu_v1.h b/rtos/pulpos/pulp_hal/include/hal/wide_alu/wide_alu_v1.h
+new file mode 100644
+index 0000000..7a79bfa
+--- /dev/null
++++ b/rtos/pulpos/pulp_hal/include/hal/wide_alu/wide_alu_v1.h
+@@ -0,0 +1,137 @@
++#include "archi/wide_alu/wide_alu_v1.h"
++
++static inline int set_delay(uint8_t delay);
++static inline int set_operands(uint32_t *a, uint32_t *b);
++static inline int poll_done(void);
++static inline int get_result(uint32_t *result);
++static inline void clear_error(void);
++static inline int set_operation(int opsel);
++static inline int trigger_operation(void);
++static inline int wide_multiply(uint32_t *a, uint32_t *b, uint32_t *c);
++
++static inline int set_delay(uint8_t delay)
++{
++  if(poll_done() != WIDE_ALU_STATUS_CODE_VALUE_IDLE)
++  {
++    return -1;
++  } 
++ 
++  volatile uint32_t *ctrl2_reg = (volatile uint32_t *)WIDE_ALU_CTRL2(0);
++  // Read the old value to save the opsel fields
++  uint32_t ctrl2_old_value = *(volatile uint32_t *)ctrl2_reg;
++  // Overwrite
++  *(volatile uint32_t *)ctrl2_reg = ctrl2_old_value | ((delay & WIDE_ALU_CTRL2_DELAY_MASK)<<WIDE_ALU_CTRL2_DELAY_LSB);
++
++  return 0;
++}
++
++
++static inline int set_operands(uint32_t *a, uint32_t *b)
++{
++  if(poll_done() != WIDE_ALU_STATUS_CODE_VALUE_IDLE)
++  {
++    return -1;
++  } 
++
++  volatile uint32_t *op_a_reg = (volatile uint32_t *)WIDE_ALU_OP_A(0);
++  volatile uint32_t *op_b_reg = (volatile uint32_t *)WIDE_ALU_OP_B(0);
++
++  for (int i = 0; i<8; i++)
++  {
++    op_a_reg[i] = a[i];
++    op_b_reg[i] = b[i];
++  }
++
++  return 0;
++}
++
++static inline int poll_done(void)
++{
++  volatile uint32_t *status_reg = (volatile uint32_t *)WIDE_ALU_STATUS(0);
++  uint32_t current_status;
++  do {
++    current_status = (((*(volatile uint32_t *)status_reg) & WIDE_ALU_STATUS_CODE_MASK)<<WIDE_ALU_STATUS_CODE_LSB);
++  } while(current_status == WIDE_ALU_STATUS_CODE_VALUE_PENDING);
++
++  return current_status;
++}
++
++static inline int get_result(uint32_t *result)
++{
++  if(poll_done() != WIDE_ALU_STATUS_CODE_VALUE_IDLE)
++  {
++    return -1;
++  } 
++
++  volatile uint32_t *result_reg = (volatile uint32_t *)WIDE_ALU_RESULT(0);
++  for (int i = 0; i<16; i++)
++  {
++    result[i] = result_reg[i];
++  }
++
++  return 0;
++}
++
++static inline void clear_error(void)
++{
++  volatile uint32_t *ctrl1_reg = (volatile uint32_t *)WIDE_ALU_CTRL1(0);
++  uint32_t ctrl1_old_value = *(volatile uint32_t *)ctrl1_reg;
++  *(volatile uint32_t *)ctrl1_reg = ctrl1_old_value | ((1 & WIDE_ALU_CTRL1_CLEAR_ERR_MASK)<<WIDE_ALU_CTRL1_CLEAR_ERR_LSB);
++}
++
++static inline int set_operation(int opsel)
++{
++  if(poll_done() != WIDE_ALU_STATUS_CODE_VALUE_IDLE)
++  {
++    return -1;
++  } 
++
++  volatile uint32_t *ctrl2_reg = (volatile uint32_t *)WIDE_ALU_CTRL2(0);
++  uint32_t ctrl2_old_value = *(volatile uint32_t *)ctrl2_reg;
++  *(volatile uint32_t *)ctrl2_reg = ctrl2_old_value | ((opsel & WIDE_ALU_CTRL2_OPSEL_MASK)<<WIDE_ALU_CTRL2_OPSEL_LSB);
++
++  return 0;
++}
++
++static inline int trigger_operation(void)
++{
++  if(poll_done() != WIDE_ALU_STATUS_CODE_VALUE_IDLE)
++  {
++    return -1;
++  } 
++
++  volatile uint32_t *ctrl1_reg = (volatile uint32_t *)WIDE_ALU_CTRL1(0);
++  uint32_t ctrl1_old_value = *(volatile uint32_t *)ctrl1_reg;
++  *(volatile uint32_t *)ctrl1_reg = ctrl1_old_value | ((1 & WIDE_ALU_CTRL1_TRIGGER_MASK)<<WIDE_ALU_CTRL1_TRIGGER_LSB);
++
++  return 0; 
++}
++
++static inline int wide_multiply(uint32_t *a, uint32_t *b, uint32_t *c)
++{
++  // Set the operands 
++  if(set_operands(a,b))
++  {
++    return -1;
++  }
++
++  // Set multiplication
++  if(set_operation(WIDE_ALU_CTRL2_OPSEL_VALUE_MUL))
++  {
++    return -1;
++  } 
++
++  // Trigger the operation
++  if(trigger_operation())
++  {
++    return -1;
++  }
++
++  // Read the result
++  if(get_result(c))
++  {
++    return -1;
++  }
++
++  return 0;
++}
